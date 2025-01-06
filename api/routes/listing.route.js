@@ -1,5 +1,5 @@
 import express from 'express';
-import { createListing, getListing, getListings } from '../controllers/listing.controller.js';
+import { createListing, deleteListing , getListing, getListings } from '../controllers/listing.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 import Listing from '../models/listing.model.js'; // Add this import
 
@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/create', verifyToken, createListing);
 router.get('/get/:id', getListing);
 router.get('/get', getListings);
+router.delete('/delete/:id', verifyToken, deleteListing);
 
 router.get('/user/:id', verifyToken, async (req, res) => {
   const userId = req.params.id;
@@ -39,5 +40,7 @@ router.get('/user/:id', verifyToken, async (req, res) => {
     });
   }
 });
+
+
 
 export default router;
