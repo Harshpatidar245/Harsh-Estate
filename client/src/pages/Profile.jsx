@@ -246,7 +246,7 @@ export default function Profile() {
         Show Listings
       </button>
       <p className='text-red-700 mt-5'>
-        {showListingsError ? 'Error showing listings' : ''}
+        {showListingsError ? 'Abe Pahele Kuch Dal to sahi' : ''}
       </p>
 
       {userListings && userListings.length > 0 && (
