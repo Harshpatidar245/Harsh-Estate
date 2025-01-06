@@ -1,5 +1,5 @@
 import express from 'express';
-import { createListing, deleteListing , getListing, getListings } from '../controllers/listing.controller.js';
+import { createListing, deleteListing, updateListing , getListing, getListings } from '../controllers/listing.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 import Listing from '../models/listing.model.js'; // Add this import
 
@@ -9,6 +9,7 @@ router.post('/create', verifyToken, createListing);
 router.get('/get/:id', getListing);
 router.get('/get', getListings);
 router.delete('/delete/:id', verifyToken, deleteListing);
+router.post('/update/:id', verifyToken, updateListing);
 
 router.get('/user/:id', verifyToken, async (req, res) => {
   const userId = req.params.id;
