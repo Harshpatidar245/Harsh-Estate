@@ -176,234 +176,242 @@ export default function Search() {
 
   return (
     <div className="relative flex flex-col md:flex-row">
-      {/* Hamburger Toggle Button */}
-      <button
-        onClick={toggleFilters}
-        className="md:hidden fixed bottom-8 left-4 z-50 p-3 bg-slate-700 text-white rounded-full shadow-lg hover:bg-slate-600 transition-all duration-300 group"
-        aria-label="Toggle Filters"
-      >
-        <div className="relative w-6 h-6">
-          <Menu
-            className={`w-6 h-6 absolute transition-all duration-300 ${
-              isFilterVisible
-                ? "opacity-0 rotate-90 scale-0"
-                : "opacity-100 rotate-0 scale-100"
-            }`}
-          />
-          <X
-            className={`w-6 h-6 absolute transition-all duration-300 ${
-              isFilterVisible
-                ? "opacity-100 rotate-0 scale-100"
-                : "opacity-0 -rotate-90 scale-0"
-            }`}
-          />
-        </div>
-      </button>
-
-      {/* Filter Section */}
-      <div
-        className={`
-        ${
+  {/* Hamburger Toggle Button */}
+  <button
+    onClick={toggleFilters}
+    className="md:hidden fixed bottom-8 left-4 z-50 p-3 bg-slate-700 text-white rounded-full shadow-lg hover:bg-slate-600 transition-all duration-300 group"
+    aria-label="Toggle Filters"
+  >
+    <div className="relative w-6 h-6">
+      <Menu
+        className={`w-6 h-6 absolute transition-all duration-300 ${
           isFilterVisible
-            ? "translate-x-0"
-            : "-translate-x-full md:translate-x-0"
-        }
-        transition-transform duration-300
-        fixed md:static
-        top-0 left-0
-        h-full
-        w-[80%] md:w-auto
-        bg-white
-        z-40
-        overflow-y-auto
-        md:min-h-screen
-        border-r-2
-        shadow-lg md:shadow-none
-      `}
-      >
-        <div className="p-7">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-            {/* Your existing form content remains the same */}
-            <div className="flex items-center gap-2">
-              <label className="whitespace-nowrap font-semibold">
-                Search Term:
-              </label>
-              <input
-                type="text"
-                id="searchTerm"
-                placeholder="Search..."
-                className="border rounded-lg p-3 w-full"
-                value={sidebardata.searchTerm}
-                onChange={handleChange}
-              />
-            </div>
+            ? "opacity-0 rotate-90 scale-0"
+            : "opacity-100 rotate-0 scale-100"
+        }`}
+      />
+      <X
+        className={`w-6 h-6 absolute transition-all duration-300 ${
+          isFilterVisible
+            ? "opacity-100 rotate-0 scale-100"
+            : "opacity-0 -rotate-90 scale-0"
+        }`}
+      />
+    </div>
+  </button>
 
-            {/* Location Fields */}
-            <div className="flex flex-col gap-4">
-              <label className="font-semibold">Location:</label>
-              <input
-                type="text"
-                id="country"
-                placeholder="Country"
-                className="border rounded-lg p-3"
-                value={sidebardata.country}
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                id="state"
-                placeholder="State"
-                className="border rounded-lg p-3"
-                value={sidebardata.state}
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                id="city"
-                placeholder="City"
-                className="border rounded-lg p-3"
-                value={sidebardata.city}
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                id="area"
-                placeholder="Area"
-                className="border rounded-lg p-3"
-                value={sidebardata.area}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="flex gap-2 flex-wrap items-center">
-              <label className="font-semibold">Type:</label>
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  id="all"
-                  className="w-5"
-                  onChange={handleChange}
-                  checked={sidebardata.type === "all"}
-                />
-                <span>Rent & Sale</span>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  id="rent"
-                  className="w-5"
-                  onChange={handleChange}
-                  checked={sidebardata.type === "rent"}
-                />
-                <span>Rent</span>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  id="sale"
-                  className="w-5"
-                  onChange={handleChange}
-                  checked={sidebardata.type === "sale"}
-                />
-                <span>Sale</span>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  id="offer"
-                  className="w-5"
-                  onChange={handleChange}
-                  checked={sidebardata.offer}
-                />
-                <span>Offer</span>
-              </div>
-            </div>
-
-            <div className="flex gap-2 flex-wrap items-center">
-              <label className="font-semibold">Amenities:</label>
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  id="parking"
-                  className="w-5"
-                  onChange={handleChange}
-                  checked={sidebardata.parking}
-                />
-                <span>Parking</span>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  id="furnished"
-                  className="w-5"
-                  onChange={handleChange}
-                  checked={sidebardata.furnished}
-                />
-                <span>Furnished</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <label className="font-semibold">Sort:</label>
-              <select
-                onChange={handleChange}
-                defaultValue={"created_at_desc"}
-                id="sort_order"
-                className="border rounded-lg p-3"
-              >
-                <option value="regularPrice_desc">Price high to low</option>
-                <option value="regularPrice_asc">Price low to high</option>
-                <option value="createdAt_desc">Latest</option>
-                <option value="createdAt_asc">Oldest</option>
-              </select>
-            </div>
-
-            <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
-              Search
-            </button>
-          </form>
+  {/* Filter Section */}
+  <div
+    className={`
+      ${
+        isFilterVisible
+          ? "translate-x-0"
+          : "-translate-x-full md:translate-x-0"
+      }
+      transition-transform duration-300
+      fixed md:static
+      top-0 left-0
+      h-full
+      w-[80%] md:w-auto
+      bg-white
+      z-40
+      overflow-y-auto
+      md:min-h-screen
+      border-r-2
+      shadow-lg md:shadow-none
+    `}
+  >
+    <div className="p-7">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        {/* Search Term */}
+        <div className="flex items-center gap-2">
+          <label className="whitespace-nowrap font-semibold">
+            Search Term:
+          </label>
+          <input
+            type="text"
+            id="searchTerm"
+            placeholder="Search..."
+            className="border rounded-lg p-3 w-full"
+            value={sidebardata.searchTerm}
+            onChange={handleChange}
+          />
         </div>
-      </div>
 
-      {/* Overlay for mobile */}
-      {isFilterVisible && (
-        <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={toggleFilters}
-        />
+        {/* Location Fields */}
+        <div className="flex flex-col gap-4">
+          <label className="font-semibold">Location:</label>
+          <input
+            type="text"
+            id="country"
+            placeholder="Country"
+            className="border rounded-lg p-3"
+            value={sidebardata.country}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            id="state"
+            placeholder="State"
+            className="border rounded-lg p-3"
+            value={sidebardata.state}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            id="city"
+            placeholder="City"
+            className="border rounded-lg p-3"
+            value={sidebardata.city}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            id="area"
+            placeholder="Area"
+            className="border rounded-lg p-3"
+            value={sidebardata.area}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Type Checkboxes */}
+        <div className="flex flex-col gap-4">
+          <label className="font-semibold">Type:</label>
+          <div className="flex flex-col md:flex-row gap-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="all"
+                className="w-5"
+                onChange={handleChange}
+                checked={sidebardata.type === "all"}
+              />
+              <span>Rent & Sale</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="rent"
+                className="w-5"
+                onChange={handleChange}
+                checked={sidebardata.type === "rent"}
+              />
+              <span>Rent</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="sale"
+                className="w-5"
+                onChange={handleChange}
+                checked={sidebardata.type === "sale"}
+              />
+              <span>Sale</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="offer"
+                className="w-5"
+                onChange={handleChange}
+                checked={sidebardata.offer}
+              />
+              <span>Offer</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Amenities Checkboxes */}
+        <div className="flex flex-col gap-4">
+          <label className="font-semibold">Amenities:</label>
+          <div className="flex flex-col md:flex-row gap-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="parking"
+                className="w-5"
+                onChange={handleChange}
+                checked={sidebardata.parking}
+              />
+              <span>Parking</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="furnished"
+                className="w-5"
+                onChange={handleChange}
+                checked={sidebardata.furnished}
+              />
+              <span>Furnished</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Sort Dropdown */}
+        <div className="flex items-center gap-2">
+          <label className="font-semibold">Sort:</label>
+          <select
+            onChange={handleChange}
+            defaultValue={"created_at_desc"}
+            id="sort_order"
+            className="border rounded-lg p-3"
+          >
+            <option value="regularPrice_desc">Price high to low</option>
+            <option value="regularPrice_asc">Price low to high</option>
+            <option value="createdAt_desc">Latest</option>
+            <option value="createdAt_asc">Oldest</option>
+          </select>
+        </div>
+
+        <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
+          Search
+        </button>
+      </form>
+    </div>
+  </div>
+
+  {/* Overlay for mobile */}
+  {isFilterVisible && (
+    <div
+      className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+      onClick={toggleFilters}
+    />
+  )}
+
+  {/* Content Section */}
+  <div className="flex-1">
+    <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
+      Listing results:
+    </h1>
+    <div className="p-7 flex flex-wrap gap-4">
+      {!loading && listings.length === 0 && (
+        <p className="text-xl text-slate-700">No listing found!</p>
+      )}
+      {loading && (
+        <p className="text-xl text-slate-700 text-center w-full">
+          Loading...
+        </p>
       )}
 
-      {/* Content Section */}
-      <div className="flex-1">
-        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
-          Listing results:
-        </h1>
-        <div className="p-7 flex flex-wrap gap-4">
-          {!loading && listings.length === 0 && (
-            <p className="text-xl text-slate-700">No listing found!</p>
-          )}
-          {loading && (
-            <p className="text-xl text-slate-700 text-center w-full">
-              Loading...
-            </p>
-          )}
+      {!loading &&
+        listings &&
+        listings.map((listing) => (
+          <ListingItem key={listing._id} listing={listing} />
+        ))}
 
-          {!loading &&
-            listings &&
-            listings.map((listing) => (
-              <ListingItem key={listing._id} listing={listing} />
-            ))}
-
-          {showMore && (
-            <button
-              onClick={onShowMoreClick}
-              className="text-green-700 hover:underline p-7 text-center w-full"
-            >
-              Show more
-            </button>
-          )}
-        </div>
-      </div>
+      {showMore && (
+        <button
+          onClick={onShowMoreClick}
+          className="text-green-700 hover:underline p-7 text-center w-full"
+        >
+          Show more
+        </button>
+      )}
     </div>
+  </div>
+</div>
+
   );
 }
