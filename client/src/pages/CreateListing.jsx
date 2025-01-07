@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   getDownloadURL,
   getStorage,
@@ -32,10 +32,504 @@ export default function CreateListing() {
     parking: false,
     furnished: false,
   });
+  const countries = ["India", "Other"];
+  const indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry",
+    "Other",
+  ];
+  const indianCities = {
+    "Andhra Pradesh": [
+      "Visakhapatnam",
+      "Vijayawada",
+      "Guntur",
+      "Nellore",
+      "Tirupati",
+      "Kurnool",
+      "Kakinada",
+      "Rajahmundry",
+      "Anantapur",
+      "Kadapa",
+      "Other",
+    ],
+    "Arunachal Pradesh": [
+      "Itanagar",
+      "Pasighat",
+      "Naharlagun",
+      "Tawang",
+      "Ziro",
+      "Bomdila",
+      "Tezu",
+      "Roing",
+      "Changlang",
+      "Daporijo",
+      "Other",
+    ],
+    Assam: [
+      "Guwahati",
+      "Silchar",
+      "Dibrugarh",
+      "Jorhat",
+      "Nagaon",
+      "Tinsukia",
+      "Tezpur",
+      "Diphu",
+      "Goalpara",
+      "Sibsagar",
+      "Other",
+    ],
+    Bihar: [
+      "Patna",
+      "Gaya",
+      "Bhagalpur",
+      "Muzaffarpur",
+      "Purnia",
+      "Darbhanga",
+      "Bihar Sharif",
+      "Arrah",
+      "Begusarai",
+      "Katihar",
+      "Other",
+    ],
+    Chhattisgarh: [
+      "Raipur",
+      "Bilaspur",
+      "Durg",
+      "Bhilai",
+      "Korba",
+      "Rajnandgaon",
+      "Jagdalpur",
+      "Raigarh",
+      "Ambikapur",
+      "Dhamtari",
+      "Other",
+    ],
+    Goa: [
+      "Panaji",
+      "Margao",
+      "Vasco da Gama",
+      "Mapusa",
+      "Ponda",
+      "Bicholim",
+      "Curchorem",
+      "Canacona",
+      "Valpoi",
+      "Sanquelim",
+      "Other",
+    ],
+    Gujarat: [
+      "Ahmedabad",
+      "Surat",
+      "Vadodara",
+      "Rajkot",
+      "Bhavnagar",
+      "Jamnagar",
+      "Junagadh",
+      "Gandhinagar",
+      "Anand",
+      "Navsari",
+      "Other",
+    ],
+    Haryana: [
+      "Gurgaon",
+      "Faridabad",
+      "Panipat",
+      "Ambala",
+      "Yamunanagar",
+      "Rohtak",
+      "Hisar",
+      "Karnal",
+      "Sonipat",
+      "Panchkula",
+      "Other",
+    ],
+    "Himachal Pradesh": [
+      "Shimla",
+      "Dharamshala",
+      "Mandi",
+      "Solan",
+      "Kullu",
+      "Bilaspur",
+      "Chamba",
+      "Hamirpur",
+      "Una",
+      "Nahan",
+      "Other",
+    ],
+    Jharkhand: [
+      "Ranchi",
+      "Jamshedpur",
+      "Dhanbad",
+      "Bokaro",
+      "Hazaribagh",
+      "Deoghar",
+      "Giridih",
+      "Ramgarh",
+      "Chaibasa",
+      "Phusro",
+      "Other",
+    ],
+    Karnataka: [
+      "Bengaluru",
+      "Mysuru",
+      "Hubballi",
+      "Mangaluru",
+      "Belagavi",
+      "Davanagere",
+      "Ballari",
+      "Tumakuru",
+      "Shivamogga",
+      "Bidar",
+      "Other",
+    ],
+    Kerala: [
+      "Thiruvananthapuram",
+      "Kochi",
+      "Kozhikode",
+      "Kollam",
+      "Thrissur",
+      "Alappuzha",
+      "Palakkad",
+      "Malappuram",
+      "Kannur",
+      "Kottayam",
+      "Other",
+    ],
+    "Madhya Pradesh": [
+      "Bhopal",
+      "Indore",
+      "Gwalior",
+      "Jabalpur",
+      "Ujjain",
+      "Sagar",
+      "Dewas",
+      "Satna",
+      "Ratlam",
+      "Rewa",
+      "Other",
+    ],
+    Maharashtra: [
+      "Mumbai",
+      "Pune",
+      "Nagpur",
+      "Nashik",
+      "Thane",
+      "Aurangabad",
+      "Solapur",
+      "Amravati",
+      "Kolhapur",
+      "Navi Mumbai",
+      "Other",
+    ],
+    Manipur: [
+      "Imphal",
+      "Thoubal",
+      "Bishnupur",
+      "Churachandpur",
+      "Kakching",
+      "Ukhrul",
+      "Senapati",
+      "Tamenglong",
+      "Moirang",
+      "Jiribam",
+      "Other",
+    ],
+    Meghalaya: [
+      "Shillong",
+      "Tura",
+      "Nongstoin",
+      "Jowai",
+      "Williamnagar",
+      "Baghmara",
+      "Mawkyrwat",
+      "Resubelpara",
+      "Khliehriat",
+      "Ampati",
+      "Other",
+    ],
+    Mizoram: [
+      "Aizawl",
+      "Lunglei",
+      "Saiha",
+      "Champhai",
+      "Serchhip",
+      "Kolasib",
+      "Lawngtlai",
+      "Mamit",
+      "Tlabung",
+      "Zawlnuam",
+      "Other",
+    ],
+    Nagaland: [
+      "Kohima",
+      "Dimapur",
+      "Mokokchung",
+      "Tuensang",
+      "Wokha",
+      "Zunheboto",
+      "Phek",
+      "Mon",
+      "Kiphire",
+      "Longleng",
+      "Other",
+    ],
+    Odisha: [
+      "Bhubaneswar",
+      "Cuttack",
+      "Rourkela",
+      "Berhampur",
+      "Sambalpur",
+      "Puri",
+      "Balasore",
+      "Baripada",
+      "Bhadrak",
+      "Jeypore",
+      "Other",
+    ],
+    Punjab: [
+      "Amritsar",
+      "Ludhiana",
+      "Jalandhar",
+      "Patiala",
+      "Bathinda",
+      "Mohali",
+      "Hoshiarpur",
+      "Pathankot",
+      "Moga",
+      "Phagwara",
+      "Other",
+    ],
+    Rajasthan: [
+      "Jaipur",
+      "Jodhpur",
+      "Udaipur",
+      "Kota",
+      "Ajmer",
+      "Bikaner",
+      "Alwar",
+      "Bharatpur",
+      "Sikar",
+      "Pali",
+      "Other",
+    ],
+    Sikkim: [
+      "Gangtok",
+      "Namchi",
+      "Geyzing",
+      "Mangan",
+      "Jorethang",
+      "Rangpo",
+      "Singtam",
+      "Rhenock",
+      "Soreng",
+      "Yuksom",
+      "Other",
+    ],
+    "Tamil Nadu": [
+      "Chennai",
+      "Coimbatore",
+      "Madurai",
+      "Tiruchirappalli",
+      "Salem",
+      "Tiruppur",
+      "Erode",
+      "Vellore",
+      "Thoothukudi",
+      "Dindigul",
+      "Other",
+    ],
+    Telangana: [
+      "Hyderabad",
+      "Warangal",
+      "Nizamabad",
+      "Khammam",
+      "Karimnagar",
+      "Ramagundam",
+      "Mahbubnagar",
+      "Adilabad",
+      "Siddipet",
+      "Jagtial",
+      "Other",
+    ],
+    Tripura: [
+      "Agartala",
+      "Udaipur",
+      "Kailashahar",
+      "Dharmanagar",
+      "Belonia",
+      "Ambassa",
+      "Sonamura",
+      "Kamalpur",
+      "Amarpur",
+      "Sabroom",
+      "Other",
+    ],
+    "Uttar Pradesh": [
+      "Lucknow",
+      "Kanpur",
+      "Ghaziabad",
+      "Agra",
+      "Meerut",
+      "Varanasi",
+      "Prayagraj",
+      "Noida",
+      "Aligarh",
+      "Moradabad",
+      "Other",
+    ],
+    Uttarakhand: [
+      "Dehradun",
+      "Haridwar",
+      "Nainital",
+      "Rishikesh",
+      "Haldwani",
+      "Rudrapur",
+      "Kashipur",
+      "Roorkee",
+      "Almora",
+      "Pithoragarh",
+      "Other",
+    ],
+    "West Bengal": [
+      "Kolkata",
+      "Asansol",
+      "Siliguri",
+      "Durgapur",
+      "Howrah",
+      "Bardhaman",
+      "Malda",
+      "Kharagpur",
+      "Darjeeling",
+      "Berhampore",
+      "Other",
+    ],
+    "Andaman and Nicobar Islands": [
+      "Port Blair",
+      "Rangat",
+      "Mayabunder",
+      "Diglipur",
+      "Bombooflat",
+      "Wimberly Gunj",
+      "Garacharma",
+      "Prothrapur",
+      "Havelock",
+      "Neil Island",
+      "Other",
+    ],
+    Chandigarh: ["Chandigarh"],
+    "Dadra and Nagar Haveli and Daman and Diu": [
+      "Silvassa",
+      "Daman",
+      "Diu",
+      "Amli",
+      "Kachigam",
+      "Bhimpore",
+      "Other",
+    ],
+    Delhi: [
+      "New Delhi",
+      "Central Delhi",
+      "West Delhi",
+      "East Delhi",
+      "North Delhi",
+      "South Delhi",
+      "Shahdara",
+      "Rohini",
+      "Dwarka",
+      "Karol Bagh",
+      "Other",
+    ],
+    "Jammu and Kashmir": [
+      "Srinagar",
+      "Jammu",
+      "Anantnag",
+      "Baramulla",
+      "Udhampur",
+      "Kathua",
+      "Kupwara",
+      "Pulwama",
+      "Ganderbal",
+      "Poonch",
+      "Other",
+    ],
+    Ladakh: ["Leh", "Kargil", "Other"],
+    Lakshadweep: [
+      "Kavaratti",
+      "Agatti",
+      "Amini",
+      "Androth",
+      "Kalpeni",
+      "Minicoy",
+      "Kadmat",
+      "Other",
+    ],
+    Puducherry: ["Puducherry", "Karaikal", "Mahe", "Yanam", "Other"],
+  };
+
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showCustomCity, setShowCustomCity] = useState(false);
+  const [availableStates, setAvailableStates] = useState([]);
+  const [availableCities, setAvailableCities] = useState([]);
+
+  // Update available states when country changes
+  useEffect(() => {
+    if (formData.country === "India") {
+      setAvailableStates(indianStates);
+    } else {
+      setAvailableStates([]);
+    }
+    // Reset state and city when country changes
+    setFormData((prev) => ({ ...prev, state: "", city: "" }));
+  }, [formData.country]);
+
+  // Update available cities when state changes
+  useEffect(() => {
+    if (formData.state && indianCities[formData.state]) {
+      setAvailableCities(indianCities[formData.state]);
+    } else {
+      setAvailableCities([]);
+    }
+    // Reset city when state changes
+    setFormData((prev) => ({ ...prev, city: "" }));
+  }, [formData.state]);
+
   console.log(formData);
   const handleImageSubmit = async (e) => {
     e.preventDefault();
@@ -128,9 +622,7 @@ export default function CreateListing() {
         ...formData,
         type: e.target.id,
       });
-    }
-
-    if (
+    } else if (
       e.target.id === "parking" ||
       e.target.id === "furnished" ||
       e.target.id === "offer"
@@ -139,18 +631,26 @@ export default function CreateListing() {
         ...formData,
         [e.target.id]: e.target.checked,
       });
-    }
-
-    if (
+    } else if (
       e.target.type === "number" ||
       e.target.type === "text" ||
-      e.target.type === "textarea"
+      e.target.type === "textarea" ||
+      e.target.tagName.toLowerCase() === "select" // Handle select elements
     ) {
       setFormData({
         ...formData,
         [e.target.id]: e.target.value,
       });
     }
+  };
+
+  const handleCityChange = (e) => {
+    const selectedCity = e.target.value;
+    setShowCustomCity(selectedCity === "Other");
+    setFormData((prev) => ({
+      ...prev,
+      city: selectedCity === "Other" ? "" : selectedCity,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -211,33 +711,77 @@ export default function CreateListing() {
             onChange={handleChange}
             value={formData.description}
           />
-          <input
-            type="text"
-            placeholder="Address"
+          
+
+          {/* Country Dropdown */}
+          <select
             className="border p-3 rounded-lg"
-            id="address"
+            id="country"
             required
             onChange={handleChange}
-            value={formData.address}
-          />
-          <input
-              type="text"
-              placeholder="Country"
-              className="border p-3 rounded-lg"
-              id="country"
-              required
-              onChange={handleChange}
-              value={formData.country}
-            />
-            <input
-              type="text"
-              placeholder="State"
-              className="border p-3 rounded-lg"
-              id="state"
-              required
-              onChange={handleChange}
-              value={formData.state}
-            />
+            value={formData.country}
+          >
+            <option value="">Select Country</option>
+            {countries.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+
+          {/* State Dropdown */}
+          <select
+            className="border p-3 rounded-lg"
+            id="state"
+            required
+            onChange={handleChange}
+            value={formData.state}
+            disabled={!formData.country || formData.country === "Other"}
+          >
+            <option value="">Select State</option>
+            {formData.country === "India" &&
+              indianStates.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+          </select>
+
+          {/* City Selection */}
+          {formData.state && formData.state !== "Other" && (
+            <div className="flex flex-col gap-2">
+              <select
+                className="border p-3 rounded-lg"
+                id="city"
+                required={!showCustomCity}
+                onChange={handleCityChange}
+                value={showCustomCity ? "Other" : formData.city}
+              >
+                <option value="">Select City</option>
+                {availableCities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+
+              {showCustomCity && (
+                <input
+                  type="text"
+                  placeholder="Enter City Name"
+                  className="border p-3 rounded-lg"
+                  id="city"
+                  required
+                  onChange={handleChange}
+                  value={formData.city}
+                />
+              )}
+              
+            </div>
+          )}
+
+          {/* Show text input for city if country or state is "Other" */}
+          {(formData.country === "Other" || formData.state === "Other") && (
             <input
               type="text"
               placeholder="City"
@@ -247,18 +791,28 @@ export default function CreateListing() {
               onChange={handleChange}
               value={formData.city}
             />
-            <input
-              type="text"
-              placeholder="Area"
-              className="border p-3 rounded-lg"
-              id="area"
-              required
-              onChange={handleChange}
-              value={formData.area}
-            />
+          )}
+          
+          <input
+            type="text"
+            placeholder="Area"
+            className="border p-3 rounded-lg"
+            id="area"
+            required
+            onChange={handleChange}
+            value={formData.area}
+          />
+          <input
+            type="text"
+            placeholder="Full Address"
+            className="border p-3 rounded-lg"
+            id="address"
+            required
+            onChange={handleChange}
+            value={formData.address}
+          />
           <div className="flex gap-6 flex-wrap">
             <div className="flex gap-2">
-              
               <input
                 type="checkbox"
                 id="sale"
@@ -350,7 +904,7 @@ export default function CreateListing() {
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
                 {formData.type === "rent" && (
-                  <span className="text-xs">($ / month)</span>
+                  <span className="text-xs">(₹ / month)</span>
                 )}
               </div>
             </div>

@@ -64,7 +64,7 @@ export default function Header() {
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/'>
           <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-            <span className='text-slate-500'>Sahand</span>
+            <span className='text-slate-500'>Harsh</span>
             <span className='text-slate-700'>Estate</span>
           </h1>
         </Link>
@@ -104,7 +104,7 @@ export default function Header() {
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 />
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <Link to="/profile">
                       <button 
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

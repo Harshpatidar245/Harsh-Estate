@@ -14,7 +14,7 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
-import Contact from '../components/Contact';
+import Contact from "../components/Contact";
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -72,7 +72,7 @@ export default function Listing() {
             ))}
           </Swiper>
 
-          <div 
+          <div
             className="absolute top-3 right-3 z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100/80 cursor-pointer hover:bg-slate-100"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
@@ -92,7 +92,7 @@ export default function Listing() {
 
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
             <p className="text-2xl font-semibold">
-              {listing.name} - ${" "}
+              {listing.name} - ₹{" "}
               {listing.offer
                 ? listing.discountPrice.toLocaleString("en-US")
                 : listing.regularPrice.toLocaleString("en-US")}
@@ -102,13 +102,37 @@ export default function Listing() {
               <FaMapMarkerAlt className="text-green-700" />
               {listing.address}
             </p>
+
+            {/* Added Location Details Section */}
+            <div className="flex flex-col gap-2 mt-4">
+              <p className="flex items-center gap-2 text-slate-600 text-sm">
+                <FaMapMarkedAlt className="text-green-700" />
+                Location Details:
+              </p>
+              <div className="flex flex-col gap-1 ml-6">
+                <p className="text-sm text-slate-600">
+                  <span className="font-semibold">Country:</span>{" "}
+                  {listing.country}
+                </p>
+                <p className="text-sm text-slate-600">
+                  <span className="font-semibold">State:</span> {listing.state}
+                </p>
+                <p className="text-sm text-slate-600">
+                  <span className="font-semibold">City:</span> {listing.city}
+                </p>
+                <p className="text-sm text-slate-600">
+                  <span className="font-semibold">Area:</span> {listing.area}
+                </p>
+              </div>
+            </div>
+
             <div className="flex gap-4">
               <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                 {listing.type === "rent" ? "For Rent" : "For Sale"}
               </p>
               {listing.offer && (
                 <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${+listing.regularPrice - +listing.discountPrice} OFF
+                  ₹{+listing.regularPrice - +listing.discountPrice} OFF
                 </p>
               )}
             </div>

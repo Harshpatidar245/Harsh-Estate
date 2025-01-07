@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ListingItem from '../components/ListingItem';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import ListingItem from "../components/ListingItem";
 
 export default function Search() {
   const navigate = useNavigate();
+  const [isFilterVisible, setIsFilterVisible] = useState(true);
   const [sidebardata, setSidebardata] = useState({
-    searchTerm: '',
-    type: 'all',
+    searchTerm: "",
+    type: "all",
     parking: false,
     furnished: false,
     offer: false,
-    sort: 'created_at',
-    order: 'desc',
-    country: '',
-    state: '',
-    city: '',
-    area: ''
+    sort: "created_at",
+    order: "desc",
+    country: "",
+    state: "",
+    city: "",
+    area: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -23,18 +25,39 @@ export default function Search() {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
+    // Hide filters by default on mobile
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsFilterVisible(false);
+      } else {
+        setIsFilterVisible(true);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleFilters = () => {
+    setIsFilterVisible(!isFilterVisible);
+  };
+
+  useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get('searchTerm');
-    const typeFromUrl = urlParams.get('type');
-    const parkingFromUrl = urlParams.get('parking');
-    const furnishedFromUrl = urlParams.get('furnished');
-    const offerFromUrl = urlParams.get('offer');
-    const sortFromUrl = urlParams.get('sort');
-    const orderFromUrl = urlParams.get('order');
-    const countryFromUrl = urlParams.get('country');
-    const stateFromUrl = urlParams.get('state');
-    const cityFromUrl = urlParams.get('city');
-    const areaFromUrl = urlParams.get('area');
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    const typeFromUrl = urlParams.get("type");
+    const parkingFromUrl = urlParams.get("parking");
+    const furnishedFromUrl = urlParams.get("furnished");
+    const offerFromUrl = urlParams.get("offer");
+    const sortFromUrl = urlParams.get("sort");
+    const orderFromUrl = urlParams.get("order");
+    const countryFromUrl = urlParams.get("country");
+    const stateFromUrl = urlParams.get("state");
+    const cityFromUrl = urlParams.get("city");
+    const areaFromUrl = urlParams.get("area");
 
     if (
       searchTermFromUrl ||
@@ -50,17 +73,17 @@ export default function Search() {
       areaFromUrl
     ) {
       setSidebardata({
-        searchTerm: searchTermFromUrl || '',
-        type: typeFromUrl || 'all',
-        parking: parkingFromUrl === 'true' ? true : false,
-        furnished: furnishedFromUrl === 'true' ? true : false,
-        offer: offerFromUrl === 'true' ? true : false,
-        sort: sortFromUrl || 'created_at',
-        order: orderFromUrl || 'desc',
-        country: countryFromUrl || '',
-        state: stateFromUrl || '',
-        city: cityFromUrl || '',
-        area: areaFromUrl || ''
+        searchTerm: searchTermFromUrl || "",
+        type: typeFromUrl || "all",
+        parking: parkingFromUrl === "true" ? true : false,
+        furnished: furnishedFromUrl === "true" ? true : false,
+        offer: offerFromUrl === "true" ? true : false,
+        sort: sortFromUrl || "created_at",
+        order: orderFromUrl || "desc",
+        country: countryFromUrl || "",
+        state: stateFromUrl || "",
+        city: cityFromUrl || "",
+        area: areaFromUrl || "",
       });
     }
 
@@ -84,37 +107,37 @@ export default function Search() {
 
   const handleChange = (e) => {
     if (
-      e.target.id === 'all' ||
-      e.target.id === 'rent' ||
-      e.target.id === 'sale'
+      e.target.id === "all" ||
+      e.target.id === "rent" ||
+      e.target.id === "sale"
     ) {
       setSidebardata({ ...sidebardata, type: e.target.id });
     }
 
-    if (e.target.id === 'searchTerm') {
+    if (e.target.id === "searchTerm") {
       setSidebardata({ ...sidebardata, searchTerm: e.target.value });
     }
 
     if (
-      e.target.id === 'parking' ||
-      e.target.id === 'furnished' ||
-      e.target.id === 'offer'
+      e.target.id === "parking" ||
+      e.target.id === "furnished" ||
+      e.target.id === "offer"
     ) {
       setSidebardata({
         ...sidebardata,
         [e.target.id]:
-          e.target.checked || e.target.checked === 'true' ? true : false,
+          e.target.checked || e.target.checked === "true" ? true : false,
       });
     }
 
-    if (e.target.id === 'sort_order') {
-      const sort = e.target.value.split('_')[0] || 'created_at';
-      const order = e.target.value.split('_')[1] || 'desc';
+    if (e.target.id === "sort_order") {
+      const sort = e.target.value.split("_")[0] || "created_at";
+      const order = e.target.value.split("_")[1] || "desc";
       setSidebardata({ ...sidebardata, sort, order });
     }
 
     // Handle location fields
-    if (['country', 'state', 'city', 'area'].includes(e.target.id)) {
+    if (["country", "state", "city", "area"].includes(e.target.id)) {
       setSidebardata({ ...sidebardata, [e.target.id]: e.target.value });
     }
   };
@@ -122,17 +145,17 @@ export default function Search() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
-    urlParams.set('searchTerm', sidebardata.searchTerm);
-    urlParams.set('type', sidebardata.type);
-    urlParams.set('parking', sidebardata.parking);
-    urlParams.set('furnished', sidebardata.furnished);
-    urlParams.set('offer', sidebardata.offer);
-    urlParams.set('sort', sidebardata.sort);
-    urlParams.set('order', sidebardata.order);
-    urlParams.set('country', sidebardata.country);
-    urlParams.set('state', sidebardata.state);
-    urlParams.set('city', sidebardata.city);
-    urlParams.set('area', sidebardata.area);
+    urlParams.set("searchTerm", sidebardata.searchTerm);
+    urlParams.set("type", sidebardata.type);
+    urlParams.set("parking", sidebardata.parking);
+    urlParams.set("furnished", sidebardata.furnished);
+    urlParams.set("offer", sidebardata.offer);
+    urlParams.set("sort", sidebardata.sort);
+    urlParams.set("order", sidebardata.order);
+    urlParams.set("country", sidebardata.country);
+    urlParams.set("state", sidebardata.state);
+    urlParams.set("city", sidebardata.city);
+    urlParams.set("area", sidebardata.area);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
@@ -141,7 +164,7 @@ export default function Search() {
     const numberOfListings = listings.length;
     const startIndex = numberOfListings;
     const urlParams = new URLSearchParams(location.search);
-    urlParams.set('startIndex', startIndex);
+    urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
     const res = await fetch(`/api/listing/get?${searchQuery}`);
     const data = await res.json();
@@ -152,159 +175,215 @@ export default function Search() {
   };
 
   return (
-    <div className='flex flex-col md:flex-row'>
-      <div className='p-7 border-b-2 md:border-r-2 md:min-h-screen'>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
-          <div className='flex items-center gap-2'>
-            <label className='whitespace-nowrap font-semibold'>
-              Search Term:
-            </label>
-            <input
-              type='text'
-              id='searchTerm'
-              placeholder='Search...'
-              className='border rounded-lg p-3 w-full'
-              value={sidebardata.searchTerm}
-              onChange={handleChange}
-            />
-          </div>
+    <div className="relative flex flex-col md:flex-row">
+      {/* Hamburger Toggle Button */}
+      <button
+        onClick={toggleFilters}
+        className="md:hidden fixed bottom-8 left-4 z-50 p-3 bg-slate-700 text-white rounded-full shadow-lg hover:bg-slate-600 transition-all duration-300 group"
+        aria-label="Toggle Filters"
+      >
+        <div className="relative w-6 h-6">
+          <Menu
+            className={`w-6 h-6 absolute transition-all duration-300 ${
+              isFilterVisible
+                ? "opacity-0 rotate-90 scale-0"
+                : "opacity-100 rotate-0 scale-100"
+            }`}
+          />
+          <X
+            className={`w-6 h-6 absolute transition-all duration-300 ${
+              isFilterVisible
+                ? "opacity-100 rotate-0 scale-100"
+                : "opacity-0 -rotate-90 scale-0"
+            }`}
+          />
+        </div>
+      </button>
 
-          {/* Location Fields */}
-          <div className='flex flex-col gap-4'>
-            <label className='font-semibold'>Location:</label>
-            <input
-              type='text'
-              id='country'
-              placeholder='Country'
-              className='border rounded-lg p-3'
-              value={sidebardata.country}
-              onChange={handleChange}
-            />
-            <input
-              type='text'
-              id='state'
-              placeholder='State'
-              className='border rounded-lg p-3'
-              value={sidebardata.state}
-              onChange={handleChange}
-            />
-            <input
-              type='text'
-              id='city'
-              placeholder='City'
-              className='border rounded-lg p-3'
-              value={sidebardata.city}
-              onChange={handleChange}
-            />
-            <input
-              type='text'
-              id='area'
-              placeholder='Area'
-              className='border rounded-lg p-3'
-              value={sidebardata.area}
-              onChange={handleChange}
-            />
-          </div>
+      {/* Filter Section */}
+      <div
+        className={`
+        ${
+          isFilterVisible
+            ? "translate-x-0"
+            : "-translate-x-full md:translate-x-0"
+        }
+        transition-transform duration-300
+        fixed md:static
+        top-0 left-0
+        h-full
+        w-[80%] md:w-auto
+        bg-white
+        z-40
+        overflow-y-auto
+        md:min-h-screen
+        border-r-2
+        shadow-lg md:shadow-none
+      `}
+      >
+        <div className="p-7">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            {/* Your existing form content remains the same */}
+            <div className="flex items-center gap-2">
+              <label className="whitespace-nowrap font-semibold">
+                Search Term:
+              </label>
+              <input
+                type="text"
+                id="searchTerm"
+                placeholder="Search..."
+                className="border rounded-lg p-3 w-full"
+                value={sidebardata.searchTerm}
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className='flex gap-2 flex-wrap items-center'>
-            <label className='font-semibold'>Type:</label>
-            <div className='flex gap-2'>
+            {/* Location Fields */}
+            <div className="flex flex-col gap-4">
+              <label className="font-semibold">Location:</label>
               <input
-                type='checkbox'
-                id='all'
-                className='w-5'
+                type="text"
+                id="country"
+                placeholder="Country"
+                className="border rounded-lg p-3"
+                value={sidebardata.country}
                 onChange={handleChange}
-                checked={sidebardata.type === 'all'}
               />
-              <span>Rent & Sale</span>
-            </div>
-            <div className='flex gap-2'>
               <input
-                type='checkbox'
-                id='rent'
-                className='w-5'
+                type="text"
+                id="state"
+                placeholder="State"
+                className="border rounded-lg p-3"
+                value={sidebardata.state}
                 onChange={handleChange}
-                checked={sidebardata.type === 'rent'}
               />
-              <span>Rent</span>
-            </div>
-            <div className='flex gap-2'>
               <input
-                type='checkbox'
-                id='sale'
-                className='w-5'
+                type="text"
+                id="city"
+                placeholder="City"
+                className="border rounded-lg p-3"
+                value={sidebardata.city}
                 onChange={handleChange}
-                checked={sidebardata.type === 'sale'}
               />
-              <span>Sale</span>
-            </div>
-            <div className='flex gap-2'>
               <input
-                type='checkbox'
-                id='offer'
-                className='w-5'
+                type="text"
+                id="area"
+                placeholder="Area"
+                className="border rounded-lg p-3"
+                value={sidebardata.area}
                 onChange={handleChange}
-                checked={sidebardata.offer}
               />
-              <span>Offer</span>
             </div>
-          </div>
 
-          <div className='flex gap-2 flex-wrap items-center'>
-            <label className='font-semibold'>Amenities:</label>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='parking'
-                className='w-5'
-                onChange={handleChange}
-                checked={sidebardata.parking}
-              />
-              <span>Parking</span>
+            <div className="flex gap-2 flex-wrap items-center">
+              <label className="font-semibold">Type:</label>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="all"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "all"}
+                />
+                <span>Rent & Sale</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="rent"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "rent"}
+                />
+                <span>Rent</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="sale"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.type === "sale"}
+                />
+                <span>Sale</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="offer"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.offer}
+                />
+                <span>Offer</span>
+              </div>
             </div>
-            <div className='flex gap-2'>
-              <input
-                type='checkbox'
-                id='furnished'
-                className='w-5'
-                onChange={handleChange}
-                checked={sidebardata.furnished}
-              />
-              <span>Furnished</span>
+
+            <div className="flex gap-2 flex-wrap items-center">
+              <label className="font-semibold">Amenities:</label>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="parking"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.parking}
+                />
+                <span>Parking</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="furnished"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebardata.furnished}
+                />
+                <span>Furnished</span>
+              </div>
             </div>
-          </div>
 
-          <div className='flex items-center gap-2'>
-            <label className='font-semibold'>Sort:</label>
-            <select
-              onChange={handleChange}
-              defaultValue={'created_at_desc'}
-              id='sort_order'
-              className='border rounded-lg p-3'
-            >
-              <option value='regularPrice_desc'>Price high to low</option>
-              <option value='regularPrice_asc'>Price low to high</option>
-              <option value='createdAt_desc'>Latest</option>
-              <option value='createdAt_asc'>Oldest</option>
-            </select>
-          </div>
+            <div className="flex items-center gap-2">
+              <label className="font-semibold">Sort:</label>
+              <select
+                onChange={handleChange}
+                defaultValue={"created_at_desc"}
+                id="sort_order"
+                className="border rounded-lg p-3"
+              >
+                <option value="regularPrice_desc">Price high to low</option>
+                <option value="regularPrice_asc">Price low to high</option>
+                <option value="createdAt_desc">Latest</option>
+                <option value="createdAt_asc">Oldest</option>
+              </select>
+            </div>
 
-          <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
-            Search
-          </button>
-        </form>
+            <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
+              Search
+            </button>
+          </form>
+        </div>
       </div>
 
-      <div className='flex-1'>
-        <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>
+      {/* Overlay for mobile */}
+      {isFilterVisible && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={toggleFilters}
+        />
+      )}
+
+      {/* Content Section */}
+      <div className="flex-1">
+        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Listing results:
         </h1>
-        <div className='p-7 flex flex-wrap gap-4'>
+        <div className="p-7 flex flex-wrap gap-4">
           {!loading && listings.length === 0 && (
-            <p className='text-xl text-slate-700'>No listing found!</p>
+            <p className="text-xl text-slate-700">No listing found!</p>
           )}
           {loading && (
-            <p className='text-xl text-slate-700 text-center w-full'>
+            <p className="text-xl text-slate-700 text-center w-full">
               Loading...
             </p>
           )}
@@ -318,7 +397,7 @@ export default function Search() {
           {showMore && (
             <button
               onClick={onShowMoreClick}
-              className='text-green-700 hover:underline p-7 text-center w-full'
+              className="text-green-700 hover:underline p-7 text-center w-full"
             >
               Show more
             </button>
